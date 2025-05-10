@@ -1,14 +1,18 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
+from database import Base
 
-Base = declarative_base()
-
-class ExampleModel(Base):
-    __tablename__ = 'example_model'
+class Questions(Base):
+    __tablename__ = 'questions'
     
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    description = Column(String, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    question_text = Column(String, nullable=False, index=True)
+
+class Choices(Base):
+    __tablename__ = 'choices'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    question_id = Column(Integer, ForeignKey('questions.id'), nullable=False)
+    choice_text = Column(String, nullable=False, index=True)
+    is_correct = Column(Boolean, default=False)
